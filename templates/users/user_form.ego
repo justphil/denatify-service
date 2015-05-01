@@ -1,51 +1,51 @@
 <%! func UserForm(w io.Writer, action string, errMsg string, d map[string]string) error %>
 
 <div class="container">
-	<div class="row">
-	  <div class="col-md-6 col-md-offset-3">
-	  	<% if action == "update" { %>
-	  		<h1>Update User Info</h1>
-	  	<% } else { %>
-	  		<h1>New User</h1>
-	  	<% } %>
-	  </div>
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <% if action == "update" { %>
+        <h1>Update User Info</h1>
+      <% } else { %>
+        <h1>New User</h1>
+      <% } %>
+    </div>
 
-	  <div class="col-md-6 col-md-offset-3">
-	  	<% if len(errMsg) > 0 { %>
-	  		<div class="alert alert-danger" role="alert"><%= errMsg %></div>
-	  	<% } %>
+    <div class="col-md-6 col-md-offset-3">
+      <% if len(errMsg) > 0 { %>
+        <div class="alert alert-danger" role="alert"><%= errMsg %></div>
+      <% } %>
 
-	  	<% if action == "update" { %>
-	  		<form action="/users/<%= d["userId"] %>/perform-update" method="POST">
-	  	<% } else { %>
-	  		<form action="/user/new" method="POST">
-	  	<% } %>
-	  	  <div class="form-group">
-		    <label for="fullname">Name</label>
-		    <input type="text" class="form-control"
-		    	   id="fullname" name="fullname" placeholder="Please enter your name..."
-		    	   value="<%= d["fullname"] %>">
-		  </div>
-		  <div class="form-group">
-		    <label for="email">Email</label>
-		    <input type="email" class="form-control"
-		    	   id="email" name="email" placeholder="Please enter your email..."
-		    	   value="<%= d["email"] %>">
-		  </div>
-		  <div class="form-group">
-		    <label for="password">Password</label>
-		    <input type="password" class="form-control"
-		    	   id="password" name="password" placeholder="Please enter a password..."
-		    	   value="<%= d["password"] %>">
-		  </div>
+      <% if action == "update" { %>
+        <form action="/users/<%= d["userId"] %>/perform-update" method="POST">
+      <% } else { %>
+        <form action="/user/new" method="POST">
+      <% } %>
+        <div class="form-group">
+        <label for="fullname">Name</label>
+        <input type="text" class="form-control"
+             id="fullname" name="fullname" placeholder="Please enter your name..."
+             value="<%= d["fullname"] %>">
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control"
+             id="email" name="email" placeholder="Please enter your email..."
+             value="<%= d["email"] %>">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control"
+             id="password" name="password" placeholder="Please enter a password..."
+             value="<%= d["password"] %>">
+      </div>
 
-		  <% if action == "update" { %>
-		  	<button type="submit" class="btn btn-default btn-block">Update User Info</button>
-		  <% } else { %>
-		  	<button type="submit" class="btn btn-default btn-block">Create User</button>
-		  <% } %>
+      <% if action == "update" { %>
+        <button type="submit" class="btn btn-default btn-block">Update User Info</button>
+      <% } else { %>
+        <button type="submit" class="btn btn-default btn-block">Create User</button>
+      <% } %>
 
-		</form>
-	  </div>
-	</div>
+    </form>
+    </div>
+  </div>
 </div>

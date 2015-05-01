@@ -1,3 +1,3 @@
-Start MongoDB:								mongod --config /usr/local/etc/mongod.conf
-Start auto-compile proxy (gin):				gin -e -ep=. -epkg=templates -eo=./templates/ego.go
-Start auto-compile proxy (gin) with env:	MONGO_URL=127.0.0.1 gin -e -ep=. -epkg=templates -eo=./templates/ego.go
+Start MongoDB:                            mongod --config /usr/local/etc/mongod.conf
+Start auto-compile proxy (gin):           gin -e -ep=. -epkg=templates -eo=./templates/ego.go
+Start auto-compile proxy (gin) with env:  MONGO_URL=127.0.0.1 gin -e -ep=. -epkg=templates -eo=./templates/ego.go
