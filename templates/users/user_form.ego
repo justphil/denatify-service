@@ -16,9 +16,9 @@
       <% } %>
 
       <% if action == "update" { %>
-        <form action="/users/<%= d["userId"] %>/perform-update" method="POST">
+        <form action="./perform-update" method="POST">
       <% } else { %>
-        <form action="/user/new" method="POST">
+        <form action="./new" method="POST">
       <% } %>
         <div class="form-group">
         <label for="fullname">Name</label>

@@ -19,7 +19,7 @@
         </div>
 
         <div class="col-md-6 col-md-offset-3">
-          <a class="btn btn-default btn-block" href="/users/<%= u.Id.Hex() %>/update" role="button">Update User Info...</a>
+          <a class="btn btn-default btn-block" href="<%= u.Id.Hex() %>/update" role="button">Update User Info...</a>
         </div>
     <% } %>
 

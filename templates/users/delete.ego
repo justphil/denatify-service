@@ -17,11 +17,11 @@
       </div>
       
       <div class="col-md-3 col-md-offset-3">
-        <a class="btn btn-primary btn-block" href="/users/<%= u.Id.Hex() %>/perform-deletion" role="button">Yes</a>
+        <a class="btn btn-primary btn-block" href="./perform-deletion" role="button">Yes</a>
       </div>
       
       <div class="col-md-3">
-        <a class="btn btn-warning btn-block" href="/users" role="button">No</a>
+        <a class="btn btn-warning btn-block" href=".." role="button">No</a>
       </div>
     <% } %>
 
