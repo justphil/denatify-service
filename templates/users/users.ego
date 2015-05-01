@@ -1,0 +1,35 @@
+<%! func Users(w io.Writer, users []*models.User, errMsg string) error %>
+
+<%% import "github.com/justphil/denatify-service/models" %%>
+
+<div class="container">
+	<div class="row">
+	  <div class="col-md-12">
+	  	<table class="table table-striped">
+	  		<thead>
+	  			<tr>
+	  				<th>ID</th>
+	  				<th>Fullname</th>
+	  				<th>Email</th>
+	  				<th>Delete</th>
+	  			</tr>
+	  		</thead>
+
+	  		<tbody>
+	  			<% for _, u := range users { %>
+	  				<tr>
+	  					<td><a href="/users/<%= u.Id.Hex() %>"><%= u.Id.Hex() %></a></td>
+	  					<td><%= u.Fullname %></td>
+	  					<td><%= u.Email %></td>
+	  					<td><a href="/users/<%= u.Id.Hex() %>/delete">delete user</a></td>
+	  				</tr>
+	  			<% } %>
+	  		</tbody>
+	  	</table>
+	  </div>
+
+	  <div class="col-md-12">
+	  	<a class="btn btn-default pull-right" href="/user/new" role="button">Add User</a>
+	  </div>
+	</div>
+</div>

@@ -1,0 +1,4 @@
+<%! func LandingPage(w io.Writer) error %>
+
+<h1>Denatify empowers you to easily expose your Web app while being restricted by NAT.</h1>
+<h2>Dead simple web app exposure behind NAT routers.</h2>

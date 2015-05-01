@@ -1,0 +1,29 @@
+<%! func DeleteUser(w io.Writer, u *models.User, err error) error %>
+
+<%% import "github.com/justphil/denatify-service/models" %%>
+
+<div class="container">
+	<div class="row">
+		
+		<% if err != nil { %>
+			<div class="col-md-6 col-md-offset-3">
+				<div class="alert alert-danger" role="alert"><%= err.Error() %></div>
+			</div>
+		<% } else { %>
+			<div class="col-md-6 col-md-offset-3">
+				Do you really want to delete the user
+				<em class="text-uppercase"><%= u.Fullname %></em>
+				(<span class="text-muted">ID: <%= u.Id.Hex() %></span>)?
+			</div>
+			
+			<div class="col-md-3 col-md-offset-3">
+				<a class="btn btn-primary btn-block" href="/users/<%= u.Id.Hex() %>/perform-deletion" role="button">Yes</a>
+			</div>
+			
+			<div class="col-md-3">
+				<a class="btn btn-warning btn-block" href="/users" role="button">No</a>
+			</div>
+		<% } %>
+
+	</div>
+</div>
