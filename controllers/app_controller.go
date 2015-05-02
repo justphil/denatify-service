@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"net/http"
-	"os"
 
 	"github.com/gorilla/context"
 	"github.com/julienschmidt/httprouter"
@@ -13,36 +12,12 @@ import (
 	"github.com/justphil/denatify-service/models/store"
 )
 
-const (
-	IS_DEV_MODE = true
-)
-
-var renderInstance *render.Render
-var storeInstance store.Store
-
-func init() {
-	renderInstance = render.New(render.Options{
-		Layout:        "_layout",
-		IndentJSON:    IS_DEV_MODE, // if true, output human readable JSON
-		IsDevelopment: IS_DEV_MODE, // if true, recompile templates on every request
-	})
-
-	storeInstance = store.NewMongoStore(getMongoUrl())
-}
-
-func getMongoUrl() string {
-	url := os.Getenv("MONGO_URL")
-	if url == "" {
-		url = "127.0.0.1"
-	}
-
-	return url
-}
-
 type AppController struct {
 	controller.Base
-	render *render.Render // we use render as a field (instead of embedding it) because we want to reuse the global render.Render instance
-	store  store.Store
+	store store.Store
+
+	// we use render as a field (instead of embedding it) because we want to reuse the global render.Render instance
+	render *render.Render
 }
 
 // lifecycle methods
@@ -54,20 +29,18 @@ func (ac *AppController) Init(rw http.ResponseWriter, r *http.Request, params ht
 	return ac.Base.Init(rw, r, params)
 }
 
-// helper methods
-func (ac *AppController) HTML(status int, name string, binding interface{}, htmlOpt ...render.HTMLOptions) {
-	ac.render.HTML(ac.ResponseWriter, status, name, binding, htmlOpt...)
-}
-
+// helper methods for handling request data
 func (ac *AppController) Bind(formStruct binding.FieldMapper) binding.Errors {
 	return binding.Bind(ac.Request, formStruct)
 }
 
+// helper methods for creating responses
 func (ac *AppController) Redirect(url string, code int) error {
 	http.Redirect(ac.ResponseWriter, ac.Request, url, code)
 	return nil
 }
 
+// helper methods for context access
 func (ac *AppController) ContextGet(key interface{}) interface{} {
 	return context.Get(ac.Request, key)
 }
