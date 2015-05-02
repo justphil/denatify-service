@@ -28,6 +28,8 @@ type MongoStore struct {
 func NewMongoStore(url string) *MongoStore {
 	sess, err := mgo.Dial(url)
 
+	// TODO: add indexes
+
 	if err != nil {
 		panic(err)
 	}
