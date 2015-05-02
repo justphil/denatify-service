@@ -12,7 +12,7 @@ type LandingPageController struct {
 }
 
 func (c *LandingPageController) Index() error {
-	fmt.Printf("Name: %s\n", c.Params.ByName("name"))
+	fmt.Printf("Name: %s # context value for foo: %s\n", c.Params.ByName("name"), c.ContextGet("foo").(string))
 	//c.HTML(http.StatusOK, "index", nil)
 	return templates.Layout(c.ResponseWriter, func() {
 		templates.LandingPage(c.ResponseWriter)

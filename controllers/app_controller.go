@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gorilla/context"
 	"github.com/julienschmidt/httprouter"
 	"github.com/justphil/httprouter-controller"
 	"github.com/mholt/binding"
@@ -65,4 +66,12 @@ func (ac *AppController) Bind(formStruct binding.FieldMapper) binding.Errors {
 func (ac *AppController) Redirect(url string, code int) error {
 	http.Redirect(ac.ResponseWriter, ac.Request, url, code)
 	return nil
+}
+
+func (ac *AppController) ContextGet(key interface{}) interface{} {
+	return context.Get(ac.Request, key)
+}
+
+func (ac *AppController) ContextSet(key, value interface{}) {
+	context.Set(ac.Request, key, value)
 }

@@ -9,6 +9,7 @@ import (
 	"github.com/justphil/httprouter-controller"
 
 	"github.com/justphil/denatify-service/controllers"
+	"github.com/justphil/denatify-service/middlewares"
 )
 
 func main() {
@@ -29,6 +30,9 @@ func main() {
 
 	// initialize middlewares (includes negroni.Recovery, negroni.Logging, negroni.Static)
 	n := negroni.Classic()
+
+	// add middlewares
+	n.Use(middlewares.FooMiddleware())
 
 	// the router should always be the last handler
 	n.UseHandler(context.ClearHandler(r)) // ClearHandler clears context values at the end of a request lifetime
