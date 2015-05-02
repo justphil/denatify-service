@@ -23,10 +23,10 @@ func main() {
 	r.POST("/user/new", controller.Action((*controllers.UsersController).CreateNewUser))
 	r.GET("/users/:userId", controller.Action((*controllers.UsersController).User))
 	r.GET("/users/:userId/delete", controller.Action((*controllers.UsersController).DeleteUser))
-	// TODO: handle this by using HTTP DELETE
+	// TODO: handle deletion by using HTTP DELETE
 	r.GET("/users/:userId/perform-deletion", controller.Action((*controllers.UsersController).PerformUserDeletion))
 	r.GET("/users/:userId/update", controller.Action((*controllers.UsersController).UpdateUser))
-	// TODO: handle this by using HTTP PUT
+	// TODO: handle update by using HTTP PUT
 	r.POST("/users/:userId/perform-update", controller.Action((*controllers.UsersController).PerformUserUpdate))
 
 	// init negroni and add default middlewares (negroni.Recovery, negroni.Logging, negroni.Static)

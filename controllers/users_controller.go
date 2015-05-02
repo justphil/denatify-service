@@ -17,24 +17,21 @@ type UsersController struct {
 
 func (c *UsersController) NewUser() error {
 	return templates.Layout(c.ResponseWriter, func() {
-		templates.UserForm(c.ResponseWriter, "create", "", nil)
+		templates.UserForm(c.ResponseWriter, "create", nil, nil)
 	})
 }
 
 func (c *UsersController) CreateNewUser() error {
-	createNewUserForm := new(forms.CreateNewUserForm)
-	errs := c.Bind(createNewUserForm)
-	var errMsg string
+	userForm := new(forms.UserForm)
+	errs := c.Bind(userForm)
 
 	if errs.Len() > 0 {
-		errMsg = "An error occurred! (1)"
-		return c.renderUserForm("create", errMsg, "", createNewUserForm)
+		return c.renderUserForm("create", errors.New("An error occurred! (1)"), "", userForm)
 	} else {
-		u := &models.User{Fullname: createNewUserForm.Fullname, Email: createNewUserForm.Email, Password: createNewUserForm.Password}
+		u := &models.User{Fullname: userForm.Fullname, Email: userForm.Email, Password: userForm.Password}
 		_, err := c.store.CreateUser(u)
 		if err != nil {
-			errMsg = "An error occurred! (2)"
-			return c.renderUserForm("create", errMsg, "", createNewUserForm)
+			return c.renderUserForm("create", err, "", userForm)
 		}
 
 		return c.Redirect("/users", http.StatusSeeOther)
@@ -42,14 +39,13 @@ func (c *UsersController) CreateNewUser() error {
 }
 
 func (c *UsersController) Users() error {
-	var errMsg string
 	users, err := c.store.GetUsers()
 	if err != nil {
-		errMsg = err.Error()
+		return err
 	}
 
 	return templates.Layout(c.ResponseWriter, func() {
-		templates.Users(c.ResponseWriter, users, errMsg)
+		templates.Users(c.ResponseWriter, users, err)
 	})
 }
 
@@ -59,7 +55,7 @@ func (c *UsersController) User() error {
 
 	userId := c.Params.ByName("userId")
 	if !bson.IsObjectIdHex(userId) {
-		err = errors.New("There is no user with the specified ID.")
+		return errors.New("The provided ID is invalid.")
 	}
 
 	if err == nil {
@@ -77,22 +73,20 @@ func (c *UsersController) UpdateUser() error {
 		return errors.New("The provided ID is invalid.")
 	}
 
-	var errMsg string
-	var data map[string]string
 	u, err := c.store.GetUserById(userId)
 	if err != nil {
-		errMsg = err.Error()
-	} else {
-		data = map[string]string{
-			"userId":   u.Id.Hex(),
-			"fullname": u.Fullname,
-			"email":    u.Email,
-			"password": u.Password,
-		}
+		return err
+	}
+
+	data := map[string]string{
+		"userId":   u.Id.Hex(),
+		"fullname": u.Fullname,
+		"email":    u.Email,
+		"password": u.Password,
 	}
 
 	return templates.Layout(c.ResponseWriter, func() {
-		templates.UserForm(c.ResponseWriter, "update", errMsg, data)
+		templates.UserForm(c.ResponseWriter, "update", err, data)
 	})
 }
 
@@ -102,25 +96,24 @@ func (c *UsersController) PerformUserUpdate() error {
 		return errors.New("The provided ID is invalid.")
 	}
 
-	updateUserForm := new(forms.CreateNewUserForm)
-	errs := c.Bind(updateUserForm)
-	var errMsg string
+	userForm := new(forms.UserForm)
+	errs := c.Bind(userForm)
+	var err error
 
 	if errs.Len() > 0 {
-		errMsg = "An error occurred! (1)"
-		return c.renderUserForm("update", errMsg, userId, updateUserForm)
+		err = errors.New("An error occurred! (1)")
+		return c.renderUserForm("update", err, userId, userForm)
 	} else {
 		u := &models.User{
 			Id:       bson.ObjectIdHex(userId),
-			Fullname: updateUserForm.Fullname,
-			Email:    updateUserForm.Email,
-			Password: updateUserForm.Password,
+			Fullname: userForm.Fullname,
+			Email:    userForm.Email,
+			Password: userForm.Password,
 		}
 
-		err := c.store.UpdateUser(u)
+		err = c.store.UpdateUser(u)
 		if err != nil {
-			errMsg = "An error occurred! (2)"
-			return c.renderUserForm("update", errMsg, userId, updateUserForm)
+			return c.renderUserForm("update", err, userId, userForm)
 		}
 
 		return c.Redirect("/users/"+userId, http.StatusSeeOther)
@@ -133,7 +126,7 @@ func (c *UsersController) DeleteUser() error {
 
 	userId := c.Params.ByName("userId")
 	if !bson.IsObjectIdHex(userId) {
-		err = errors.New("There is no user with the specified ID.")
+		return errors.New("The provided ID is invalid.")
 	}
 
 	if err == nil {
@@ -148,7 +141,7 @@ func (c *UsersController) DeleteUser() error {
 func (c *UsersController) PerformUserDeletion() error {
 	userId := c.Params.ByName("userId")
 	if !bson.IsObjectIdHex(userId) {
-		return errors.New("There is no user with the specified ID.")
+		return errors.New("The provided ID is invalid.")
 	}
 
 	err := c.store.DeleteUserById(userId)
@@ -159,7 +152,7 @@ func (c *UsersController) PerformUserDeletion() error {
 	return c.Redirect("/users", http.StatusSeeOther)
 }
 
-func (c *UsersController) renderUserForm(action string, errMsg string, userId string, form *forms.CreateNewUserForm) error {
+func (c *UsersController) renderUserForm(action string, err error, userId string, form *forms.UserForm) error {
 	data := map[string]string{
 		"userId":   userId,
 		"fullname": form.Fullname,
@@ -168,6 +161,6 @@ func (c *UsersController) renderUserForm(action string, errMsg string, userId st
 	}
 
 	return templates.Layout(c.ResponseWriter, func() {
-		templates.UserForm(c.ResponseWriter, action, errMsg, data)
+		templates.UserForm(c.ResponseWriter, action, err, data)
 	})
 }

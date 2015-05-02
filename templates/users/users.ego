@@ -1,4 +1,4 @@
-<%! func Users(w io.Writer, users []*models.User, errMsg string) error %>
+<%! func Users(w io.Writer, users []*models.User, err error) error %>
 
 <%% import "github.com/justphil/denatify-service/models" %%>
 

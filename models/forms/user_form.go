@@ -4,13 +4,13 @@ import (
 	"github.com/mholt/binding"
 )
 
-type CreateNewUserForm struct {
+type UserForm struct {
 	Fullname string
 	Email    string
 	Password string
 }
 
-func (f *CreateNewUserForm) FieldMap() binding.FieldMap {
+func (f *UserForm) FieldMap() binding.FieldMap {
 	return binding.FieldMap{
 		&f.Fullname: binding.Field{
 			Form:     "fullname",
