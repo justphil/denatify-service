@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/codegangsta/negroni"
+	"github.com/gorilla/context"
 	"github.com/julienschmidt/httprouter"
 	"github.com/justphil/httprouter-controller"
 
@@ -30,7 +31,7 @@ func main() {
 	n := negroni.Classic()
 
 	// the router should always be the last handler
-	n.UseHandler(r)
+	n.UseHandler(context.ClearHandler(r)) // ClearHandler clears context values at the end of a request lifetime
 
 	// bind server to interface / port and block
 	n.Run(":" + getPort())
