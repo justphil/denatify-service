@@ -20,8 +20,7 @@ var storeInstance store.Store
 
 func init() {
 	renderInstance = render.New(render.Options{
-		IndentJSON:    IS_DEV_MODE, // if true, output human readable JSON
-		IsDevelopment: IS_DEV_MODE, // if true, recompile templates on every request
+		IndentJSON: IS_DEV_MODE, // if true, output human readable JSON
 	})
 
 	storeInstance = store.NewMongoStore(getMongoUrl())
