@@ -50,17 +50,12 @@ func (c *UsersController) Users() error {
 }
 
 func (c *UsersController) User() error {
-	var u *models.User
-	var err error
-
 	userId := c.Params.ByName("userId")
 	if !bson.IsObjectIdHex(userId) {
 		return errors.New("The provided ID is invalid.")
 	}
 
-	if err == nil {
-		u, err = c.store.GetUserById(userId)
-	}
+	u, err := c.store.GetUserById(userId)
 
 	return templates.Layout(c.ResponseWriter, func() {
 		templates.User(c.ResponseWriter, u, err)
@@ -98,11 +93,9 @@ func (c *UsersController) PerformUserUpdate() error {
 
 	userForm := new(forms.UserForm)
 	errs := c.Bind(userForm)
-	var err error
 
 	if errs.Len() > 0 {
-		err = errors.New("An error occurred! (1)")
-		return c.renderUserForm("update", err, userId, userForm)
+		return c.renderUserForm("update", errors.New("An error occurred! (1)"), userId, userForm)
 	} else {
 		u := &models.User{
 			Id:       bson.ObjectIdHex(userId),
@@ -111,7 +104,7 @@ func (c *UsersController) PerformUserUpdate() error {
 			Password: userForm.Password,
 		}
 
-		err = c.store.UpdateUser(u)
+		err := c.store.UpdateUser(u)
 		if err != nil {
 			return c.renderUserForm("update", err, userId, userForm)
 		}
@@ -121,17 +114,12 @@ func (c *UsersController) PerformUserUpdate() error {
 }
 
 func (c *UsersController) DeleteUser() error {
-	var u *models.User
-	var err error
-
 	userId := c.Params.ByName("userId")
 	if !bson.IsObjectIdHex(userId) {
 		return errors.New("The provided ID is invalid.")
 	}
 
-	if err == nil {
-		u, err = c.store.GetUserById(userId)
-	}
+	u, err := c.store.GetUserById(userId)
 
 	return templates.Layout(c.ResponseWriter, func() {
 		templates.DeleteUser(c.ResponseWriter, u, err)
